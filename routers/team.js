@@ -13,13 +13,7 @@ const { authenticate, isBusinessOwner } = require('../middlewares/auth');
 const router = express.Router();
 
 // Create Team
-router.post(
-  '/',
-  authenticate,
-  isBusinessOwner,
-  isValidEmailInOrganization,
-  createTeam
-);
+router.post('/', authenticate, isBusinessOwner, createTeam);
 
 // Delete Team
 router.delete('/:id', authenticate, validateTeamOwner, deleteTeam);

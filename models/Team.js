@@ -20,7 +20,6 @@ const teamSchema = new mongoose.Schema(
     leaderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Employee',
-      required: [true, 'You must supply a leader for a team!'],
     },
   },
   { timestamps: true }
