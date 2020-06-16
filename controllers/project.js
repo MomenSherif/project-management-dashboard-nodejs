@@ -33,10 +33,23 @@ const getProjects = async (req, res) => {
   res.json(projects);
 };
 
+const assignTeam = async (req, res) => {
+  const isAssigned = req.project.teams.some((id) => id.equals(req.body.teamId));
+  const operator = isAssigned ? '$pull' : '$addToSet';
+  const message = `${isAssigned ? 'Removed' : 'Assigned'} Successfully`;
+  await req.project.updateOne({
+    [operator]: {
+      teams: req.body.teamId,
+    },
+  });
+  res.json({ message });
+};
+
 module.exports = {
   createProject,
   deleteProject,
   updateProject,
   getProject,
   getProjects,
+  assignTeam,
 };

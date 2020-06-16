@@ -5,6 +5,7 @@ const {
   updateProject,
   getProject,
   getProjects,
+  assignTeam,
 } = require('../controllers/project');
 const { authenticate, isBusinessOwner } = require('../middlewares/auth');
 const { validateProjectOwner } = require('../middlewares/project');
@@ -37,5 +38,14 @@ router.get('/:id', authenticate, validateProjectOwner, getProject);
 
 // Get Projects
 router.get('/', authenticate, getProjects);
+
+// Assign Team to Prorject
+router.post(
+  '/:id/assign-team',
+  authenticate,
+  isBusinessOwner,
+  validateProjectOwner,
+  assignTeam
+);
 
 module.exports = router;

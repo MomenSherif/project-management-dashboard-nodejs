@@ -20,8 +20,15 @@ const getTask = async (req, res) => {
   res.json(req.task);
 };
 
+const toggleState = async (req, res) => {
+  req.task.state = req.task.state === 'in-progress' ? 'done' : 'in-progress';
+  await req.task.save();
+  res.json(req.task);
+};
+
 module.exports = {
   createTask,
   getTasks,
   getTask,
+  toggleState,
 };

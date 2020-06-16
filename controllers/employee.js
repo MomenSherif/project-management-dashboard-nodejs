@@ -8,6 +8,30 @@ const signIn = async (req, res) => {
   res.json({ employee, token });
 };
 
+const getEmployees = async (req, res) => {
+  const employees = await Employee.find({
+    organizationId: req.employee.organizationId,
+  });
+  res.json(employees);
+};
+
+const getEmployee = async (req, res) => {
+  const employee = await Employee.findById(req.params.id);
+  if (!employee) throw new CustomError(404, 'Employee not Found!');
+  res.json(employee);
+};
+
+const assignToTeam = async (req, res) => {
+  const employee = await Employee.findOne({ email: req.body.email });
+  employee.role = 'employee';
+  employee.teamId = req.body.teamId;
+  await employee.save();
+  res.json(employee);
+};
+
 module.exports = {
   signIn,
+  getEmployees,
+  getEmployee,
+  assignToTeam,
 };
