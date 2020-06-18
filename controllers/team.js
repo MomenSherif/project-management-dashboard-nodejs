@@ -41,7 +41,7 @@ const updateTeam = async (req, res) => {
 const getTeam = async (req, res) => {
   const { team } = req;
   await Team.populate(team, [
-    { path: 'leaderId', select: 'firstName lastName' },
+    { path: 'leaderId', select: 'firstName lastName email' },
     { path: 'employees', select: 'firstName lastName phoneNumber email role' },
     { path: 'projects', select: 'title state' }
   ]);
@@ -52,7 +52,11 @@ const getTeam = async (req, res) => {
 const getTeams = async (req, res) => {
   const teams = await Team.find({
     organizationId: req.employee.organizationId
-  });
+  }).populate([
+    { path: 'leaderId', select: 'firstName lastName email' },
+    { path: 'employees', select: 'firstName lastName phoneNumber email role' },
+    { path: 'projects', select: 'title state' }
+  ]);
 
   res.json(teams);
 };

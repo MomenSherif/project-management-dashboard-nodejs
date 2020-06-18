@@ -11,7 +11,7 @@ const getTasks = async (req, res) => {
   const query = req.query.employeeId ? req.query.employeeId : { $exists: true };
   const tasks = await Task.find({
     employeeId: query,
-    organizationId: req.employee.organizationId,
+    organizationId: req.employee.organizationId
   });
   res.json(tasks);
 };
@@ -30,5 +30,5 @@ module.exports = {
   createTask,
   getTasks,
   getTask,
-  toggleState,
+  toggleState
 };
