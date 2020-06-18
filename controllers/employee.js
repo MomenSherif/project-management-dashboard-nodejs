@@ -26,8 +26,10 @@ const getEmployee = async (req, res) => {
       select: 'name',
     })
     .execPopulate();
+  const empTasks = await emp.populate('tasks').execPopulate();
+  console.log(empTasks);
   if (!emp) throw new CustomError(404, 'Employee not Found!');
-  res.json(emp);
+  res.json(empTasks);
 };
 
 const assignToTeam = async (req, res) => {
