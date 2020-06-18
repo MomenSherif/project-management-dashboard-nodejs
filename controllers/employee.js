@@ -16,7 +16,10 @@ const getEmployees = async (req, res) => {
 };
 
 const getEmployee = async (req, res) => {
-  const employee = await Employee.findById(req.params.id);
+  const employee = await Employee.findById(req.params.id).populate({
+    path: 'organizationId',
+    select: 'name',
+  });
   if (!employee) throw new CustomError(404, 'Employee not Found!');
   res.json(employee);
 };
