@@ -70,7 +70,13 @@ const employeeSchema = new mongoose.Schema(
       required: [true, 'You must supply a password for employee!'],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: { virtuals: true },
+  }
 );
 
 employeeSchema.plugin(uniqueValidator, {
