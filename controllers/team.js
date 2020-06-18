@@ -5,7 +5,7 @@ const createTeam = async (req, res) => {
   // const employee = await Employee.findOne({ email: req.body.email });
   const team = new Team({
     ...req.body,
-    organizationId: req.employee.organizationId,
+    organizationId: req.employee.organizationId
     // leaderId: employee._id,
   });
   // employee.role = 'team-leader';
@@ -30,7 +30,7 @@ const updateTeam = async (req, res) => {
   formerLeader.role = 'employee';
 
   const updates = Object.keys(req.body);
-  updates.forEach((update) => {
+  updates.forEach(update => {
     req.team[update] = req.body[update];
   });
 
@@ -38,13 +38,20 @@ const updateTeam = async (req, res) => {
   res.json(req.team);
 };
 
-const getTeam = (req, res) => {
-  res.json(req.team);
+const getTeam = async (req, res) => {
+  const { team } = req;
+  await Team.populate(team, [
+    { path: 'leaderId', select: 'firstName lastName' },
+    { path: 'employees', select: 'firstName lastName phoneNumber email role' },
+    { path: 'projects', select: 'title state' }
+  ]);
+
+  res.json(team);
 };
 
 const getTeams = async (req, res) => {
   const teams = await Team.find({
-    organizationId: req.employee.organizationId,
+    organizationId: req.employee.organizationId
   });
 
   res.json(teams);
@@ -55,5 +62,5 @@ module.exports = {
   deleteTeam,
   updateTeam,
   getTeam,
-  getTeams,
+  getTeams
 };

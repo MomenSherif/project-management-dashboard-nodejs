@@ -13,5 +13,5 @@ const validateTeamOwner = async (req, res, next) => {
 };
 
 module.exports = {
-  validateTeamOwner,
+  validateTeamOwner
 };
