@@ -11,7 +11,8 @@ const authenticate = async (req, res, next) => {
   if (!req.headers.authorization) throw new CustomError(401, 'Unauthorized!');
 
   const token = req.headers.authorization.replace('Bearer ', '');
-  const { _id } = await jwtVerify(token, jwtSecretKey).catch((e) => {
+
+  const { _id } = await jwtVerify(token, jwtSecretKey).catch(e => {
     throw new CustomError(401, 'Unauthorized Expired Token!');
   });
 
@@ -40,5 +41,5 @@ const isTeamLeader = async (req, res, next) => {
 module.exports = {
   authenticate,
   isBusinessOwner,
-  isTeamLeader,
+  isTeamLeader
 };
