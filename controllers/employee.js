@@ -1,4 +1,5 @@
 const Employee = require('../models/Employee');
+const Team = require('../models/Team');
 const CustomError = require('../helper/CustomError');
 
 const signIn = async (req, res) => {
@@ -6,6 +7,18 @@ const signIn = async (req, res) => {
   if (!employee) throw new CustomError(401, 'Invalid email or password!');
   const token = await employee.generateAuthToken();
   res.json({ employee, token });
+};
+
+const createEmployee = async (req, res) => {
+  const team = await Team.findOne({
+    name: req.body.teamId,
+    organizationId: req.employee.organizationId,
+  });
+  req.body.teamId = team._id;
+  req.body.organizationId = req.employee.organizationId;
+  const employee = new Employee(req.body);
+  await employee.save();
+  res.json(employee);
 };
 
 const getEmployees = async (req, res) => {
@@ -45,4 +58,5 @@ module.exports = {
   getEmployees,
   getEmployee,
   assignToTeam,
+  createEmployee,
 };

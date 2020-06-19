@@ -5,6 +5,7 @@ const {
   getEmployees,
   getEmployee,
   assignToTeam,
+  createEmployee,
 } = require('../controllers/employee');
 const { authenticate, isBusinessOwner } = require('../middlewares/auth');
 const { isValidEmailInOrganization } = require('../middlewares/employee');
@@ -15,12 +16,7 @@ const router = express.Router();
 router.post('/sign-in', signIn);
 
 // Create Employee
-router.post('/', authenticate, isBusinessOwner, async (req, res) => {
-  req.body.organizationId = req.employee.organizationId;
-  const employee = new Employee(req.body);
-  await employee.save();
-  res.json(employee);
-});
+router.post('/', authenticate, isBusinessOwner, createEmployee);
 
 // Get Employees
 router.get('/', authenticate, getEmployees);
