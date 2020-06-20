@@ -5,7 +5,7 @@ const createTeam = async (req, res) => {
   // const employee = await Employee.findOne({ email: req.body.email });
   const team = new Team({
     ...req.body,
-    organizationId: req.employee.organizationId
+    organizationId: req.employee.organizationId,
     // leaderId: employee._id,
   });
   // employee.role = 'team-leader';
@@ -22,19 +22,26 @@ const deleteTeam = async (req, res) => {
 
 const updateTeam = async (req, res) => {
   const employee = await Employee.findOne({ email: req.body.email });
+
   req.body.leaderId = employee._id;
   employee.role = 'team-leader';
   employee.teamdId = req.team._id;
 
-  const formerLeader = await Employee.findById(req.team.leaderId);
-  formerLeader.role = 'employee';
+  console.log(req.team);
+
+  if (req.team.leaderId) {
+    const formerLeader = await Employee.findById(req.team.leaderId);
+    formerLeader.role = 'employee';
+    await formerLeader.save();
+  }
 
   const updates = Object.keys(req.body);
-  updates.forEach(update => {
+  updates.forEach((update) => {
     req.team[update] = req.body[update];
   });
+  console.log(req.team);
 
-  await Promise.all([req.team.save(), formerLeader.save(), employee.save()]);
+  await Promise.all([req.team.save(), employee.save()]);
   res.json(req.team);
 };
 
@@ -43,7 +50,7 @@ const getTeam = async (req, res) => {
   await Team.populate(team, [
     { path: 'leaderId', select: 'firstName lastName email' },
     { path: 'employees', select: 'firstName lastName phoneNumber email role' },
-    { path: 'projects', select: 'title state' }
+    { path: 'projects', select: 'title state' },
   ]);
 
   res.json(team);
@@ -51,11 +58,11 @@ const getTeam = async (req, res) => {
 
 const getTeams = async (req, res) => {
   const teams = await Team.find({
-    organizationId: req.employee.organizationId
+    organizationId: req.employee.organizationId,
   }).populate([
     { path: 'leaderId', select: 'firstName lastName email' },
     { path: 'employees', select: 'firstName lastName phoneNumber email role' },
-    { path: 'projects', select: 'title state' }
+    { path: 'projects', select: 'title state' },
   ]);
 
   res.json(teams);
@@ -66,5 +73,5 @@ module.exports = {
   deleteTeam,
   updateTeam,
   getTeam,
-  getTeams
+  getTeams,
 };

@@ -24,7 +24,9 @@ const createEmployee = async (req, res) => {
 const getEmployees = async (req, res) => {
   const employees = await Employee.find({
     organizationId: req.employee.organizationId,
-  }).sort({createdAt : -1}).populate('teamId');
+  })
+    .sort({ createdAt: -1 })
+    .populate('teamId');
   res.json(employees);
 };
 
@@ -40,7 +42,6 @@ const getEmployee = async (req, res) => {
     },
     { path: 'tasks' },
   ]);
-  console.log(employee);
   if (!employee) throw new CustomError(404, 'Employee not Found!');
   res.json(employee);
 };
