@@ -24,7 +24,7 @@ const createEmployee = async (req, res) => {
 const getEmployees = async (req, res) => {
   const employees = await Employee.find({
     organizationId: req.employee.organizationId,
-  });
+  }).sort({createdAt : -1}).populate('teamId');
   res.json(employees);
 };
 
