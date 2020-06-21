@@ -27,8 +27,6 @@ const updateTeam = async (req, res) => {
   employee.role = 'team-leader';
   employee.teamdId = req.team._id;
 
-  console.log(req.team);
-
   if (req.team.leaderId) {
     const formerLeader = await Employee.findById(req.team.leaderId);
     formerLeader.role = 'employee';
@@ -39,7 +37,6 @@ const updateTeam = async (req, res) => {
   updates.forEach((update) => {
     req.team[update] = req.body[update];
   });
-  console.log(req.team);
 
   await Promise.all([req.team.save(), employee.save()]);
   res.json(req.team);

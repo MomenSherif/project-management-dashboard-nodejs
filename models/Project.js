@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Task = require('./Task');
 
 const projectSchema = new mongoose.Schema(
   {
@@ -47,6 +48,10 @@ projectSchema.virtual('tasks', {
   ref: 'Task',
   localField: '_id',
   foreignField: 'projectId',
+});
+
+projectSchema.pre('remove', async function () {
+  await Task.deleteMany({ projectId: this._id });
 });
 
 const Project = mongoose.model('Project', projectSchema);

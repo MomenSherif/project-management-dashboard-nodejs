@@ -12,7 +12,7 @@ const authenticate = async (req, res, next) => {
 
   const token = req.headers.authorization.replace('Bearer ', '');
 
-  const { _id } = await jwtVerify(token, jwtSecretKey).catch(e => {
+  const { _id } = await jwtVerify(token, jwtSecretKey).catch((e) => {
     throw new CustomError(401, 'Unauthorized Expired Token!');
   });
 
@@ -29,6 +29,7 @@ const isBusinessOwner = (req, res, next) => {
 
 const isTeamLeader = async (req, res, next) => {
   const employee = await Employee.findById(req.body.employeeId);
+
   if (
     req.employee.role !== 'team-leader' ||
     !req.employee.teamId.equals(employee.teamId)
@@ -41,5 +42,5 @@ const isTeamLeader = async (req, res, next) => {
 module.exports = {
   authenticate,
   isBusinessOwner,
-  isTeamLeader
+  isTeamLeader,
 };
