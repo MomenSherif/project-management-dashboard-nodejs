@@ -21,7 +21,11 @@ const updateProject = async (req, res) => {
   res.json(req.project);
 };
 
-const getProject = (req, res) => {
+const getProject = async (req, res) => {
+  await Project.populate(req.project, {
+    path: 'organizationId',
+    select: 'name',
+  });
   res.json(req.project);
 };
 
