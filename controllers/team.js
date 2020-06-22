@@ -23,15 +23,15 @@ const deleteTeam = async (req, res) => {
 const updateTeam = async (req, res) => {
   const employee = await Employee.findOne({ email: req.body.email });
 
-  req.body.leaderId = employee._id;
-  employee.role = 'team-leader';
-  employee.teamdId = req.team._id;
-
   if (req.team.leaderId) {
     const formerLeader = await Employee.findById(req.team.leaderId);
     formerLeader.role = 'employee';
     await formerLeader.save();
   }
+
+  req.body.leaderId = employee._id;
+  employee.role = 'team-leader';
+  employee.teamdId = req.team._id;
 
   const updates = Object.keys(req.body);
   updates.forEach((update) => {
